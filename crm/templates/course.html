@@ -3,6 +3,7 @@
 {%  block title %}Информация о курсе{% endblock %}
 
 {% block content %}
+
 <a href="/courses">Назад</a>
 <a href="/edit_course?id={{ courses.id }}">Изменить</a>
 <a href="/delete_course?id={{ courses.id }}" onclick="return confirm('Точно удалить?')">Удалить</a>

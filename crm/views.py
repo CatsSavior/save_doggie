@@ -48,13 +48,16 @@ def edit(request):
         courses = Course.objects.all()
         return render(request, 'edit.html', {'student': student,'courses': courses})
     if request.method == 'POST':
+        id = request.GET.get('id')
+        student = Student.objects.get(pk=id)
         name = request.POST.get('name', '')
         surname = request.POST.get('surname', '')
 
         id = request.GET.get('id')
 
         if name == '' or surname == '':
-            return HttpResponse("Заполните все поля")
+            messages.add_message(request, messages.ERROR, 'Заполните все поля!')
+            return redirect('/edit?id={}'.format(student.id))
 
         student = Student.objects.get(pk=id)
         student.name = name
@@ -107,13 +110,17 @@ def edit_course(request):
         courses = Course.objects.get(pk=id)
         return render(request, 'edit_course.html', {'courses': courses})
     if request.method == 'POST':
+        id = request.GET.get('id')
+        courses = Course.objects.get(pk=id)
+
         name = request.POST.get('name', '')
         teacher = request.POST.get('teacher', '')
 
         id = request.GET.get('id')
 
         if name == '' or teacher == '':
-            return HttpResponse("Заполните все поля")
+            messages.add_message(request, messages.ERROR, 'Заполните все поля!')
+            return redirect('/edit_course?id={}'.format(courses.id))
 
         courses = Course.objects.get(pk=id)
         courses.name = name
