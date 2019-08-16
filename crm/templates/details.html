@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block title %}Информация об участнике{%  endblock %}
+
+{% block content %}
+<a href="/">Назад</a>
+<a href="/edit?id={{ student.id }}">Изменить</a>
+<a href="/delete?id={{ student.id }}" onclick="return confirm('Точно удалить?')">Удалить</a>
+<h1>{{ student.name }} {{ student.surname }}</h1>
+<ul>
+    <li><strong>Email:</strong> {{ student.email }}</li>
+    <li><strong>Комната:</strong> {{ student.room }}</li>
+    <li><strong>Направление:</strong> <a href="/course?id={{ student.course.id }}">{{ student.course.name }}</a></li>
+    <li><strong>Преподаватель:</strong> {{ student.course.teacher }}</li>
+</ul>
+<p>
+   <strong>Комментарий: {{student.description }}</strong>
+</p>
+{% endblock %}

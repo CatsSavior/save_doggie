@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{%  block title %}Добавить участника{% endblock %}
+
+{% block content %}
+<a href="/student?id={{ student.id }}">Назад</a>
+<h1>Изменить: {{ student.name }} {{ student.surname }}</h1>
+
+<form action="/edit?id={{ student.id }}" method="post">
+    {% csrf_token %}
+    <strong>Имя: </strong> <input type="text" name="name" value="{{ student.name }}"/><br>
+    <strong>Фамилия: </strong> <input type="text" name="surname" value="{{ student.surname }}"/><br>
+    <strong>Направление:</strong>
+    <select name="course_id">
+        <option value="">{{ student.course }}</option>
+        {% for course in courses %}
+            <option value="{{ course.id }}">{{ course.name }}</option>
+        {% endfor %}
+    </select>
+    <br>
+    <strong>Комментарий:</strong> <textarea name="description">{{ student.description }}</textarea>
+    <input type="submit" value="Сохранить">
+</form>
+{% endblock %}

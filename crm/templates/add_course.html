@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Добавить курс{% endblock %}
+
+{% block content %}
+<a href="/courses">Назад</a>
+<h1>Добавить</h1>
+
+{% for message in messages %}
+        <div class="alert alert-danger" role="alert">
+            <strong>Ошибка! </strong>{{ message }}
+        </div>
+    {% endfor %}
+
+<form action="/add_course" method="post">
+    {% csrf_token %}
+    <strong>Название: </strong> <input type="text" name="name"/><br>
+    <strong>Преподаватель: </strong> <input type="text" name="teacher"/><br>
+    <input type="submit" value="Добавить">
+</form>
+{% endblock %}
