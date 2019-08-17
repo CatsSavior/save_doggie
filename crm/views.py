@@ -89,7 +89,7 @@ def details(request):
         comment.author = request.user
 
         receiver_id = request.GET.get('id')
-        comment.receiver = Student.objects.get(pk=receiver_id)
+        comment.who = Student.objects.get(pk=receiver_id)
         comment.save()
 
         return redirect(f'/student?id={receiver_id}')
