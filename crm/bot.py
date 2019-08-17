@@ -8,7 +8,7 @@ import telebot
 import uuid
 
 
-token = "973907064:AAHUO1lOJ2-sflQ8AR-i6NLBo9oylcQB8jU"
+token = "ТОКЕН"
 
 # Обходим блокировку с помощью прокси
 telebot.apihelper.proxy = {'https': 'socks5h://geek:socks@t.geekclass.ru:7777'}
