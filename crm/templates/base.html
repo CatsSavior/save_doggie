@@ -14,8 +14,10 @@
     <title>GoToCRM: {% block title %}{% endblock %}</title>
 </head>
 <body>
+<script src="/static/search.js"></script>
 <a href="/">Участники</a>
 <a href="/courses">Направления</a>
+<strong>{{ user.username }}</strong>
 <hr>
 {% block content %}
 {% endblock %}

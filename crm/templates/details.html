@@ -4,10 +4,7 @@
 
 {% block content %}
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.js" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-
-
+<img align="right" src="{{ student.photo }}" width=500px/>
 <a href="/">Назад</a>
 <a href="/edit?id={{ student.id }}">Изменить</a>
 <a href="/delete?id={{ student.id }}" onclick="return confirm('Точно удалить?')">Удалить</a>
@@ -15,10 +12,24 @@
 <ul>
     <li><strong>Email:</strong> {{ student.email }}</li>
     <li><strong>Комната:</strong> {{ student.room }}</li>
-    <li><strong>Направление:</strong> <a href="/course?id={{ student.course.id }}">{{ student.course.name }}</a></li>
+    <li><strong>Направление:</strong> {{ student.course.name }}</li>
     <li><strong>Преподаватель:</strong> {{ student.course.teacher }}</li>
 </ul>
 <p>
-   <strong>Комментарий: {{student.description }}</strong>
+    {{ student.description }}
 </p>
+
+<h3>Комментарии:</h3>
+<ul>
+    {% for comment in comments %}
+        <p>{{comment.author}}:</a> {{ comment.text }}</p>
+    {% endfor %}
+</ul>
+<p><strong>Введите ваш комментарий</strong></p>
+<form action="/student?id={{ student.id }}" method="POST">
+    {% csrf_token %}
+    <textarea name="text"></textarea>
+    <input type="submit" value="submit" name="submit">
+</form>
+
 {% endblock %}

@@ -29,4 +29,7 @@ urlpatterns = [
     path('add_course', add_course),
     path('edit_course', edit_course),
     path('delete_course', delete_course),
+    path('login', login_page),
+    path('logout', logout_page),
+    path('register', register),
 ]
