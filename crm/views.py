@@ -21,8 +21,18 @@ class LoginValidation(forms.Form):
 def index(request):
     if not request.user.is_authenticated:
         return redirect('/login')
-    students = Student.objects.all()
-    return render(request, 'index.html', {'students': students})
+
+    if request.method == 'POST':
+        text = request.POST.get('search', '')
+
+        students = Student.objects.all().filter(name=text)
+
+        return render(request, 'index.html', {'students':students})
+
+    if request.method == 'GET':
+        students = Student.objects.all()
+        return render(request, 'index.html', {'students': students})
+
 
 def logout_page(request):
     logout(request)
