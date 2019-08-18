@@ -4,9 +4,19 @@
 
 {% block content %}
 <a href="/add">Добавить</a>
+<br>
+
+<strong>Поиск по участникам:</strong>
+
+<form action="/" method="post">
+    {% csrf_token %}
+<input type="text" name="search"/>
+<input type="submit" value="Поиск"><br>
+
 <h1>Участники</h1>
 
 <ul>
+
     {% for student in students %}
         <li><a href="/student?id={{ student.id }}">
             {{ student.name }} {{ student.surname }}</a>
