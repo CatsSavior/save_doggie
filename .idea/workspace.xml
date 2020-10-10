@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="813ad25f-3766-4b64-916c-e5e1f40b4d3c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/GoToCRM/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/GoToCRM/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crm/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crm/templates/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/crm/templates/add.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crm/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/crm/templates/base_old.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crm/templates/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/crm/templates/edit.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crm/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crm/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/crm/templates/base.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -25,6 +21,9 @@
         <option value="HTML File" />
       </list>
     </option>
+  </component>
+  <component name="Git.Rebase.Settings">
+    <option name="NEW_BASE" value="master" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -49,11 +48,11 @@
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\goto_django\BMB\crm\static" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/crm/templates" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\goto_django\BMB\crm\static" />
     </key>
   </component>
   <component name="RunManager" selected="Python.manage">
