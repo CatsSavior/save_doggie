@@ -12,24 +12,7 @@
 <ul>
     <li><strong>Email:</strong> {{ student.email }}</li>
     <li><strong>Комната:</strong> {{ student.room }}</li>
-    <li><strong>Направление:</strong> {{ student.course.name }}</li>
     <li><strong>Преподаватель:</strong> {{ student.course.teacher }}</li>
 </ul>
-<p>
-    {{ student.description }}
-</p>
-
-<h3>Комментарии:</h3>
-<ul>
-    {% for comment in comments %}
-        <p>{{comment.author}}:</a> {{ comment.text }}</p>
-    {% endfor %}
-</ul>
-<p><strong>Введите ваш комментарий</strong></p>
-<form action="/student?id={{ student.id }}" method="POST">
-    {% csrf_token %}
-    <textarea name="text"></textarea>
-    <input type="submit" value="submit" name="submit">
-</form>
 
 {% endblock %}

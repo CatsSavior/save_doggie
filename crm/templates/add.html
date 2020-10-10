@@ -20,15 +20,6 @@
         <div class="form-group">
             <label>Фамилия: </label> <input class="form-control" type="text" name="surname"/>
         </div>
-        <div class="form-group">
-            <label>Направление:</label>
-            <select class="form-control" name="course_id">
-                <option value="">Нет</option>
-                {% for course in courses %}
-                    <option value="{{ course.id }}">{{ course.name }}</option>
-                {% endfor %}
-            </select>
-        </div>
 
         <div class="form-group">
             <input class="btn btn-primary" type="submit" value="Добавить">

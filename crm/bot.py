@@ -2,8 +2,8 @@ import os
 import django
 os.environ["DJANGO_SETTINGS_MODULE"] = 'GoToCRM.settings'
 django.setup()
-from crm.models import Student, User
-from django.contrib.auth import login, authenticate, logout
+from crm.models import Student, User, Comment
+from django.contrib.auth import login
 
 import telebot
 import uuid
@@ -20,17 +20,30 @@ bot = telebot.TeleBot(token=token)
 
 exists = 0
 log_in = 0
+log_try = 0
+photo_try = 0
+com_try = 0
+step_one = 0
+username = {'login': 'comment'}
+
+
+def photo_edit(user):
+    global photo_try
+    bot.send_message(user, 'кому фотку менять будем?')
+    photo_try = 1
+
 
 
 def login(user):
-
+    global log_try
     bot.send_message(user, 'введи логин свой, негодяй')
-
-def photo(user):
-
-    bot.send_message(user, 'Кому аву менять будем?')
+    log_try = 1
 
 
+def com(user):
+    global com_try
+    bot.send_message(user, 'кому оставим коммент?')
+    com_try = 1
 
 
 @bot.message_handler(commands=["start"])
@@ -39,10 +52,12 @@ def repeat_all_messages(message):
     keyboard = types.InlineKeyboardMarkup()
 
     # добавляем на нее две кнопки
-    button1 = types.InlineKeyboardButton(text="Залогиниться", callback_data="button1")
-    button2 = types.InlineKeyboardButton(text="Загрузить фото", callback_data="button2")
+    button1 = types.InlineKeyboardButton(text="Залогиниться", callback_data="login")
+    button2 = types.InlineKeyboardButton(text="Загрузить фото", callback_data="photo")
+    button3 = types.InlineKeyboardButton(text="Оставить комментарий", callback_data="comment")
     keyboard.add(button1)
     keyboard.add(button2)
+    keyboard.add(button3)
 
     # отправляем сообщение пользователю
     bot.send_message(message.chat.id, "Нажмите кнопку!", reply_markup=keyboard)
@@ -52,53 +67,79 @@ def repeat_all_messages(message):
 @bot.callback_query_handler(func=lambda call: True)
 def callback_inline(call):
     if call.message:
-        if call.data == "button1":
+        if call.data == "login":
             bot.send_message(call.message.chat.id, "Сейчас будем логиниться")
             login(call.message.chat.id)
-        if call.data == "button2":
+        if call.data == "photo":
             bot.send_message(call.message.chat.id, "Сейчас будем загружать фото")
-            photo(call.message.chat.id)
+            photo_edit(call.message.chat.id)
+        if call.data == "comment":
+            bot.send_message(call.message.chat.id, "Ну давай оставим коммент")
+            com(call.message.chat.id)
 
 
 # content_types=['text'] - сработает, если нам прислали текстовое сообщение
 @bot.message_handler(content_types=['text'])
 def echo(message):
 
-    global name_id, log_in
-
+    global name_id, log_in, log_try, photo_try, com_try, step_one, username, comment
+    text = message.text
+    user = message.chat.id
     # message - входящее сообщение
     # message.text - это его текст
     # message.chat.id - это номер его автора
-    text = message.text
-    user = message.chat.id
 
-    for i in User.objects.all():
-        if text == i.username:
-            print('Пароль подошел')
-            bot.send_message(user, 'Здарово, ' + i.username)
-            log_in = 1
-        else:
-            print('Не робит')
+    if log_try == 1:
+        for i in User.objects.all():
+            if text == i.username:
+                print('Пароль подошел')
+                bot.send_message(user, 'Здарово, ' + i.username)
+                log_in = 1
+                #username = ...
 
-    text_out = 'такого ученика нет'
-
-    for e in Student.objects.all():
-        global exists
-        if text == e.name:
-            text_out = 'Такой ученик есть'
-            exists = 1
-            name_id = e.id
-            print(e.photo)
-            if e.photo != None:
-                with open(e.photo, 'rb') as new_file:
-                    bot.send_photo(message.chat.id, new_file.read())
             else:
-                text_out = 'Ученик есть, а фото нет'
+                print('Не робит')
 
-    if exists == 1:
-        bot.send_message(user, text_out)
-    else:
-        bot.send_message(user, text_out)
+        log_try = 0
+
+    if photo_try == 1:
+        text_out = 'такого ученика нет'
+
+        for e in Student.objects.all():
+            global exists
+            if text == e.name:
+                text_out = 'Такой ученик есть'
+                exists = 1
+                name_id = e.id
+                if e.photo != None:
+                    with open(e.photo, 'rb') as new_file:
+                        bot.send_photo(message.chat.id, new_file.read())
+                else:
+                    text_out = 'Ученик есть, а фото нет'
+
+        if exists == 1:
+            bot.send_message(user, text_out)
+        else:
+            bot.send_message(user, text_out)
+        photo_try = 0
+
+    if com_try == 1 and log_in == 1 and step_one == 0:
+        comment = Comment()
+        for i in User.objects.all():
+            if username == i.username:
+                comment.author = i.username
+        comment.who = text
+        step_one = 1
+        bot.send_message(user, 'окей, теперь введи текст комментария')
+    elif com_try == 1 and log_in == 1 and step_one == 1:
+        comment.text = text
+        comment.save()
+        step_one = 0
+        com_try = 0
+    elif com_try == 1 and log_in == 0:
+        bot.send_message(user, 'я тут против анонимности. сначала залогинься')
+
+
 
 
 

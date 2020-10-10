@@ -10,13 +10,7 @@
     {% csrf_token %}
     <strong>Имя: </strong> <input type="text" name="name" value="{{ student.name }}"/><br>
     <strong>Фамилия: </strong> <input type="text" name="surname" value="{{ student.surname }}"/><br>
-    <strong>Направление:</strong>
-    <select name="course_id">
-        <option value="">{{ student.course }}</option>
-        {% for course in courses %}
-            <option value="{{ course.id }}">{{ course.name }}</option>
-        {% endfor %}
-    </select>
+
     <br>
     <input type="submit" value="Сохранить">
 </form>
