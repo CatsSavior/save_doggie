@@ -1,16 +1,22 @@
 {% extends 'base.html' %}
 
-{%  block title %}Добавить участника{% endblock %}
+{%  block title %}Добавить питомца{% endblock %}
 
 {% block content %}
 <a href="/student?id={{ student.id }}">Назад</a>
-<h1>Изменить: {{ student.name }} {{ student.surname }}</h1>
+<h1>Изменить: {{ student.name }}</h1>
 
 <form action="/edit?id={{ student.id }}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <strong>Имя: </strong> <input type="text" name="name" value="{{ student.name }}"/><br>
-    <strong>Фамилия: </strong> <input type="text" name="surname" value="{{ student.surname }}"/><br>
-    <strong>Загрузить фото: </strong> <input type="file" name="photo" value="{{ student.photo }}"/><br>
+    <strong>Кличка: </strong> <input type="text" name="name" value="{{ student.name }}"/><br>
+    <strong>Телефон владельца: </strong> <input type="text" name="phone_number" value="{{ student.phone_number }}"/><br>
+    <strong>Почта хозяина: </strong> <input type="text" name="email" value="{{ student.email }}"/><br>
+    <strong>Адрес: </strong> <input type="text" name="adress" value="{{ student.surname }}"/><br>
+    <strong>Цвет шерсти: </strong> <input type="text" name="color" value="{{ student.dadname }}"/><br>
+    <strong>Пол питомца: </strong> <input type="text" name="sex" value="{{ student.sex }}"/><br>
+    <strong>Особые приметы и противопоказания: </strong> <input type="text" name="description" value="{{ student.description }}"/><br>
+    <strong>Группа крови: </strong> <input type="text" name="blood" value="{{ student.weight }}"/><br>
+    <!--<strong>Загрузить фото: </strong> <input type="file" name="photo" value="{{ student.photo }}"/><br>--!>
 
     <br>
     <input type="submit" value="Сохранить">

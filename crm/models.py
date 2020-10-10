@@ -14,7 +14,7 @@ class Student(models.Model):
     dadname = models.CharField(max_length=30, null=True)
     email = models.EmailField(null=True)
     description = models.TextField(default="")
-    photo = models.FilePathField(upload_to='/static/')
+    photo = models.FilePathField(null=True)
     sex = models.CharField(max_length=1, null=True, choices=sex_types)
     weight = models.FloatField(null=True)
     phone_number = models.CharField(max_length=12, null=True)

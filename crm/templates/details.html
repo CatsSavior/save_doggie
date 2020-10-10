@@ -1,18 +1,57 @@
 {% extends 'base.html' %}
 
-{% block title %}Информация об участнике{%  endblock %}
+{% block title %}Информация о питомце{%  endblock %}
 
 {% block content %}
 
-<img align="right" src="{{ student.photo }}" width=500px/>
+<!--<img align="right" src="{{ student.photo }}" width=500px/>--!>
 <a href="/">Назад</a>
 <a href="/edit?id={{ student.id }}">Изменить</a>
 <a href="/delete?id={{ student.id }}" onclick="return confirm('Точно удалить?')">Удалить</a>
-<h1>{{ student.name }} {{ student.surname }}</h1>
-<ul>
-    <li><strong>Email:</strong> {{ student.email }}</li>
-    <li><strong>Комната:</strong> {{ student.room }}</li>
-    <li><strong>Преподаватель:</strong> {{ student.course.teacher }}</li>
-</ul>
+<h1>{{ student.name }}</h1>
+
+    <div class="row border border-success rounded" >
+
+<div class="col-sm">
+
+<label style = "font-weight: bold; font-size: 25px;" for="staticAdress" class="col-sm-2 col-form-label">Адрес:</label>
+<input style = "font-size: 25px;"type="text" readonly class="form-control-plaintext" id="staticAdress" value="{{ student.surname }}">
+
+
+<label style = "font-weight: bold; font-size: 25px;" for="staticTel" class="col-sm-2 col-form-label">Телефон хозяина:</label>
+<input style = "font-size: 25px;"type="text" readonly class="form-control-plaintext" id="staticTel" value="{{ student.phone_number }}">
+
+
+<label style = "font-weight: bold; font-size: 25px;" for="staticTel" class="col-sm-2 col-form-label">Почта хозяина:</label>
+<input style = "font-size: 25px;"type="text" readonly class="form-control-plaintext" id="staticTel" value="{{ student.email }}">
+
+</div>
+        <div class="col-sm">
+
+<label style = "font-weight: bold; font-size: 25px;" for="staticCol" class="col-sm-2 col-form-label">Кличка:</label>
+<input style = "font-size: 25px;"type="text" readonly class="form-control-plaintext" id="staticName" value="{{ student.name }}">
+
+<label style = "font-weight: bold; font-size: 25px;" for="staticName" class="col-sm-2 col-form-label">Цвет шерсти:</label>
+<input style = "font-size: 25px;"type="text" readonly class="form-control-plaintext" id="staticCol" value="{{ student.dadname }}">
+
+
+<label style = "font-weight: bold; font-size: 25px;" for="staticTel" class="col-sm-2 col-form-label">Пол питомца:</label>
+<input style = "font-size: 25px;"type="text" readonly class="form-control-plaintext" id="staticTel" value="{{ student.sex }}">
+
+</div>
+        <div class="col-sm">
+
+
+<label style = "font-weight: bold; font-size: 25px;" for="staticSign" class="col-sm-2 col-form-label">Особые приметы и противопоказания:</label>
+<input style = "font-size: 25px;"type="text" readonly class="form-control-plaintext" id="staticSign" value="{{ student.description }}">
+
+
+<label style = "font-weight: bold; font-size: 25px;" for="staticBlood" class="col-sm-2 col-form-label">Группа крови:</label>
+<input style = "font-size: 25px;"type="text" readonly class="form-control-plaintext" id="staticBlood" value="{{ student.weight }}">
+</div>
+
+</div>
+
+</div>
 
 {% endblock %}

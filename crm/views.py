@@ -107,18 +107,16 @@ def add(request):
         return render(request, 'add.html')
     if request.method == 'POST':
         name = request.POST.get('name', '')
-        surname = request.POST.get('surname', '')
-        photo = request.get('photo', '')
-        photo.raise_for_status()
+        '''photo = request.get('photo', '')
+        photo.raise_for_status()'''
 
-        if name == '' or surname == '':
+        if name == '':
             messages.add_message(request, messages.ERROR, 'Заполните все поля!')
             return redirect('/add')
 
         student = Student()
         student.name = name
-        student.surname = surname
-        student.photo = photo
+        #student.photo = photo
         student.save()
 
         return redirect('/student?id={}'.format(student.id))
@@ -133,19 +131,34 @@ def edit(request):
         id = request.GET.get('id')
         student = Student.objects.get(pk=id)
         name = request.POST.get('name', '')
-        surname = request.POST.get('surname', '')
-        photo = request.POST.get('photo', request.FILES)
+        adress = request.POST.get('adress', '')
+        phone_number = request.POST.get('phone_number', '')
+        email = request.POST.get('email', '')
+        color = request.POST.get('color', '')
+        sex = request.POST.get('sex', '')
+        description = request.POST.get('description', '')
+        blood = request.POST.get('blood', '')
+
+        #photo = request.POST.get('photo', request.FILES)
 
         id = request.GET.get('id')
 
-        if name == '' or surname == '':
+        if name == '':
             messages.add_message(request, messages.ERROR, 'Заполните все поля!')
             return redirect('/edit?id={}'.format(student.id))
 
         student = Student.objects.get(pk=id)
         student.name = name
-        student.surname = surname
-        student.photo = photo
+        student.email = email
+        student.surname = adress
+        student.phone_number = phone_number
+        student.email = email
+        student.dadname = color
+        student.sex = sex
+        student.description = description
+        student.weight = blood
+
+        #student.photo = photo
         student.save()
 
         return redirect('/student?id={}'.format(student.id))

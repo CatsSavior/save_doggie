@@ -2,13 +2,19 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="813ad25f-3766-4b64-916c-e5e1f40b4d3c" name="Default Changelist" comment="(не слушай Семена)">
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.local.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_10_2020_14_11__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_10_2020_14_11__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_10_2020_14_12__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_10_2020_14_12__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_10_2020_14_13__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_10_10_2020_14_13__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_rebase__Default_Changelist_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crm/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crm/static/Bar.png" beforeDir="false" afterPath="$PROJECT_DIR$/crm/static/Bar.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crm/static/Dur.png" beforeDir="false" afterPath="$PROJECT_DIR$/crm/static/Dur.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crm/templates/about.html" beforeDir="false" afterPath="$PROJECT_DIR$/crm/templates/about.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crm/templates/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/crm/templates/add.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crm/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/crm/templates/base.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crm/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/crm/templates/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crm/templates/login.html" beforeDir="false" afterPath="$PROJECT_DIR$/crm/templates/login.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crm/templates/register.html" beforeDir="false" afterPath="$PROJECT_DIR$/crm/templates/register.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crm/templates/details.html" beforeDir="false" afterPath="$PROJECT_DIR$/crm/templates/details.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/crm/templates/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/crm/templates/edit.html" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crm/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
     </list>
@@ -54,11 +60,13 @@
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
   </component>
   <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\User\PycharmProjects\save_doggie\crm\static" />
+      <recent name="C:\Users\User\PycharmProjects\save_doggie\crm\Duge.png" />
+      <recent name="C:\goto_django\BMB\crm\static" />
+    </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/crm/templates" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\goto_django\BMB\crm\static" />
     </key>
   </component>
   <component name="RunManager" selected="Python.manage">
@@ -173,6 +181,7 @@
       <workItem from="1602273015433" duration="537000" />
       <workItem from="1602313926548" duration="371000" />
       <workItem from="1602314411673" duration="12936000" />
+      <workItem from="1602343545919" duration="5112000" />
     </task>
     <task id="LOCAL-00001" summary="+bootstrap">
       <created>1565941698422</created>
