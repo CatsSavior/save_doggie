@@ -19,7 +19,7 @@ from crm.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', index),
+    path('', about),
     path('student', details),
     path('add', add),
     path('edit', edit),
@@ -27,4 +27,5 @@ urlpatterns = [
     path('login', login_page),
     path('logout', logout_page),
     path('register', register),
+    path('all_cards', index),
 ]

@@ -116,6 +116,8 @@ def add(request):
     if request.method == 'POST':
         name = request.POST.get('name', '')
         surname = request.POST.get('surname', '')
+        photo = request.POST.get('photo', '', request.FILES)
+        #photo = NoteForm(request.POST, request.FILES)
 
         if name == '' or surname == '':
             messages.add_message(request, messages.ERROR, 'Заполните все поля!')
@@ -124,6 +126,7 @@ def add(request):
         student = Student()
         student.name = name
         student.surname = surname
+        student.photo = photo
         student.save()
 
         return redirect('/student?id={}'.format(student.id))
@@ -139,6 +142,7 @@ def edit(request):
         student = Student.objects.get(pk=id)
         name = request.POST.get('name', '')
         surname = request.POST.get('surname', '')
+        photo = request.POST.get('photo', request.FILES)
 
         id = request.GET.get('id')
 
@@ -149,6 +153,7 @@ def edit(request):
         student = Student.objects.get(pk=id)
         student.name = name
         student.surname = surname
+        student.photo = photo
         student.save()
 
         return redirect('/student?id={}'.format(student.id))
@@ -162,6 +167,7 @@ def delete(request):
     return redirect('/')
 
 
-# выше ученики, ниже курсы
+def about(request):
+    return render(request, "about.html")
 
 
