@@ -1,41 +1,40 @@
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.js" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
+    <nav class="navbar navbar-expand-lg navbar-dark font-weight-bold" style="background-color: #006400;" >
+    <a class="navbar-brand font-weight-bold" href="/">Save Doggie</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
 
-<nav class="navbar navbar-expand-lg navbar-dark font-weight-bold" style="background-color: #F41F3B;" >
-<a class="navbar-brand font-weight-bold" href="#">БМБ</a>
-<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-<span class="navbar-toggler-icon"></span>
-</button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav mr-auto ml-3">
+    <li class="nav-item">
+    <a class="nav-link" href="/all_cards">Данные хорошего мальчика <span class="sr-only">(current)</span></a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link" href="/">О проекте</a>
+    </li>
+    <li class="nav-item">
+    <a class="nav-link" href="#">Стать спонсором</a>
+    </li>
+    </ul>
 
-<div class="collapse navbar-collapse" id="navbarNav">
-<ul class="navbar-nav mr-auto justify-content-center">
-<li class="nav-item">
-<a class="nav-link" href="/all_cards">Медкарта <span class="sr-only">(current)</span></a>
-<li class="nav-item">
-<a class="nav-link" href="/">О проекте</a>
-</li>
-        <!--
-<li class="nav-item">
-<a class="nav-link" href="#">Стать спонсором</a>
-</li>
---!>
-</ul>
-
-
-
-<form class="form-inline my-2 my-lg-0" id ="search">
-<input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Search">
-<button class="btn btn-outline-dark my-2 my-sm-0 btn-light" type="button">Искать</button>
-</form>
-</div>
+    <form class="form-inline my-2 my-lg-0 mr-3" id ="search">
+    <input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Search">
+    <button class="btn btn-outline-dark my-2 my-sm-0 btn-light" type="button">Искать</button>
+    </form>
 
     <div class="d-flex">
-<a class="nav-link" href="/login">Войти <span class="sr-only">(current)</span></a>
-<button type="button" class="btn btn-dark" data-target="/logout">Выйти</button>
+
+    <a style = "color: white;" class="nav-link" href="/register">Войти</a>
+    <a style = "color: white;" class="nav-link" href="/logout">Выйти</a>
+
     </div>
 
-</nav>
+    </div>
+
+    </nav>
 
 {% block content %}
 {% endblock %}

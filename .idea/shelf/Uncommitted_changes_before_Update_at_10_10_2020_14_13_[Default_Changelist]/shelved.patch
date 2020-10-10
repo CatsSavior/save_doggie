@@ -1,0 +1,669 @@
+Index: crm/templates/add.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{% extends 'base.html' %}\r\n\r\n{% block title %}Добавить участника{% endblock %}\r\n\r\n{% block content %}\r\n    <a href=\"/\">Назад</a>\r\n    <h1>Добавить</h1>\r\n\r\n    {% for message in messages %}\r\n        <div class=\"alert alert-danger\" role=\"alert\">\r\n  Заполните все поля!\r\n</div>\r\n    {% endfor %}\r\n\r\n    <form action=\"/add\" method=\"post\" enctype=\"multipart/form-data\">\r\n        {% csrf_token %}\r\n        <div class=\"form-group\">\r\n            <label>Имя: </label> <input class=\"form-control\" type=\"text\" name=\"name\"/>\r\n        </div>\r\n        <div class=\"form-group\">\r\n            <label>Фамилия: </label> <input class=\"form-control\" type=\"text\" name=\"surname\"/>\r\n        </div>\r\n        <div class=\"form-group\">\r\n            <label>Фото </label> <input class=\"form-control\" type=\"file\" name=\"photo\"/>\r\n        </div>\r\n\r\n        <div class=\"form-group\">\r\n            <input class=\"btn btn-primary\" type=\"submit\" value=\"Добавить\">\r\n        </div>\r\n    </form>\r\n{% endblock %}\r\n\r\n+9
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- crm/templates/add.html	(revision 4b958fc20101a6bb99f479f8f1873e45937b94b3)
++++ crm/templates/add.html	(date 1602328377532)
+@@ -12,7 +12,7 @@
+ </div>
+     {% endfor %}
+ 
+-    <form action="/add" method="post" enctype="multipart/form-data">
++    <form action="/add" method="post">
+         {% csrf_token %}
+         <div class="form-group">
+             <label>Имя: </label> <input class="form-control" type="text" name="name"/>
+@@ -20,14 +20,9 @@
+         <div class="form-group">
+             <label>Фамилия: </label> <input class="form-control" type="text" name="surname"/>
+         </div>
+-        <div class="form-group">
+-            <label>Фото </label> <input class="form-control" type="file" name="photo"/>
+-        </div>
+ 
+         <div class="form-group">
+             <input class="btn btn-primary" type="submit" value="Добавить">
+         </div>
+     </form>
+-{% endblock %}
+-
+-+9
+\ No newline at end of file
++{% endblock %}
+\ No newline at end of file
+Index: GoToCRM/urls.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>\"\"\"GoToCRM URL Configuration\r\n\r\nThe `urlpatterns` list routes URLs to views. For more information please see:\r\n    https://docs.djangoproject.com/en/2.2/topics/http/urls/\r\nExamples:\r\nFunction views\r\n    1. Add an import:  from my_app import views\r\n    2. Add a URL to urlpatterns:  path('', views.home, name='home')\r\nClass-based views\r\n    1. Add an import:  from other_app.views import Home\r\n    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')\r\nIncluding another URLconf\r\n    1. Import the include() function: from django.urls import include, path\r\n    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))\r\n\"\"\"\r\nfrom django.contrib import admin\r\nfrom django.urls import path\r\nfrom crm.views import *\r\n\r\nurlpatterns = [\r\n    path('admin/', admin.site.urls),\r\n    path('', about),\r\n    path('student', details),\r\n    path('add', add),\r\n    path('edit', edit),\r\n    path('delete', delete),\r\n    path('login', login_page),\r\n    path('logout', logout_page),\r\n    path('register', register),\r\n    path('all_cards', index),\r\n]\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- GoToCRM/urls.py	(revision 4b958fc20101a6bb99f479f8f1873e45937b94b3)
++++ GoToCRM/urls.py	(date 1602328377526)
+@@ -19,7 +19,7 @@
+ 
+ urlpatterns = [
+     path('admin/', admin.site.urls),
+-    path('', about),
++    path('', index),
+     path('student', details),
+     path('add', add),
+     path('edit', edit),
+@@ -27,5 +27,4 @@
+     path('login', login_page),
+     path('logout', logout_page),
+     path('register', register),
+-    path('all_cards', index),
+ ]
+Index: crm/views.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.http import HttpResponse\r\nfrom django.shortcuts import render, redirect\r\nfrom django.contrib import messages\r\nfrom django.contrib.auth import login, authenticate, logout\r\n\r\nfrom crm.models import Student\r\n\r\nfrom django.contrib.auth.models import User, Group\r\nfrom django import forms\r\n\r\n\r\nclass RegisterValidation(forms.Form):\r\n    login = forms.CharField(max_length=30)\r\n    email = forms.EmailField()\r\n    password = forms.CharField(min_length=6)\r\n    invite = forms.CharField(max_length=10)\r\n\r\n\r\nclass LoginValidation(forms.Form):\r\n    login = forms.CharField(max_length=30)\r\n    password = forms.CharField(min_length=6)\r\n\r\n\r\ndef index(request):\r\n    if not request.user.is_authenticated:\r\n        return redirect('/login')\r\n\r\n    if request.method == 'POST':\r\n        text = request.POST.get('search', '')\r\n\r\n        students = Student.objects.all().filter(name=text)\r\n\r\n        return render(request, 'index.html', {'students': students})\r\n\r\n    if request.method == 'GET':\r\n        students = Student.objects.all()\r\n        return render(request, 'index.html', {'students': students})\r\n\r\n\r\ndef logout_page(request):\r\n    logout(request)\r\n    return redirect('/login')\r\n\r\n\r\ndef login_page(request):\r\n    if request.method == 'GET':\r\n        return render(request, 'login.html')\r\n    if request.method == 'POST':\r\n        form = LoginValidation(request.POST)\r\n        if not form.is_valid():\r\n            messages.add_message(request, messages.ERROR, 'Заполните все поля!')\r\n            return redirect('/login')\r\n\r\n        username = request.POST['login']\r\n        password = request.POST['password']\r\n        user = authenticate(request, username=username, password=password)\r\n\r\n        if user is None:\r\n            messages.add_message(request, messages.ERROR, 'Заполните все поля!')\r\n            return redirect('/login')\r\n        else:\r\n            login(request, user)\r\n            return redirect('/')\r\n\r\n\r\ndef register(request):\r\n    invites = {'admin': 'cool_admin', 'user': 'stupid_user'}\r\n\r\n    if request.method == 'GET':\r\n        return render(request, 'register.html')\r\n\r\n    if request.method == 'POST':\r\n        form = RegisterValidation(request.POST)\r\n        if not form.is_valid():\r\n            return HttpResponse('Заполните все поля')\r\n\r\n        user = User()\r\n        user.username = request.POST.get('login')\r\n        if User.objects.all().filter(username=user.username):\r\n            return HttpResponse('Юзернейм уже существует')\r\n\r\n        user.email = request.POST.get('email')\r\n        if User.objects.all().filter(email=user.email):\r\n            return HttpResponse('Юзернейм уже существует')\r\n\r\n        invite = request.POST.get('invite')\r\n        for i in invites:\r\n            print(invites[i])\r\n            if invite == invites[i]:\r\n                user.set_password(request.POST.get('password'))\r\n                user.save()\r\n                login(request, user)\r\n                return redirect('/')\r\n            else:\r\n                return HttpResponse('Трабл с инвайтом')\r\n\r\n\r\ndef details(request):\r\n    if not request.user.is_authenticated:\r\n        return redirect('/login')\r\n\r\n    if request.method == 'GET':\r\n        id = request.GET.get('id')\r\n        student = Student.objects.get(pk=id)\r\n        return render(request, 'details.html', {'student': student})\r\n\r\n    if request.method == 'POST':\r\n        user = request.user\r\n        group = Group.objects.filter(name='admin').first()\r\n        return render(request, 'index.html')\r\n\r\n\r\ndef add(request):\r\n    if request.method == 'GET':\r\n        return render(request, 'add.html')\r\n    if request.method == 'POST':\r\n        name = request.POST.get('name', '')\r\n        surname = request.POST.get('surname', '')\r\n        photo = request.POST.get('photo', '', request.FILES)\r\n        #photo = NoteForm(request.POST, request.FILES)\r\n\r\n        if name == '' or surname == '':\r\n            messages.add_message(request, messages.ERROR, 'Заполните все поля!')\r\n            return redirect('/add')\r\n\r\n        student = Student()\r\n        student.name = name\r\n        student.surname = surname\r\n        student.photo = photo\r\n        student.save()\r\n\r\n        return redirect('/student?id={}'.format(student.id))\r\n\r\n\r\ndef edit(request):\r\n    if request.method == 'GET':\r\n        id = request.GET.get('id')\r\n        student = Student.objects.get(pk=id)\r\n        return render(request, 'edit.html', {'student': student})\r\n    if request.method == 'POST':\r\n        id = request.GET.get('id')\r\n        student = Student.objects.get(pk=id)\r\n        name = request.POST.get('name', '')\r\n        surname = request.POST.get('surname', '')\r\n        photo = request.POST.get('photo', request.FILES)\r\n\r\n        id = request.GET.get('id')\r\n\r\n        if name == '' or surname == '':\r\n            messages.add_message(request, messages.ERROR, 'Заполните все поля!')\r\n            return redirect('/edit?id={}'.format(student.id))\r\n\r\n        student = Student.objects.get(pk=id)\r\n        student.name = name\r\n        student.surname = surname\r\n        student.photo = photo\r\n        student.save()\r\n\r\n        return redirect('/student?id={}'.format(student.id))\r\n\r\n\r\ndef delete(request):\r\n    id = request.GET.get('id')\r\n    student = Student.objects.get(pk=id)\r\n    student.delete()\r\n\r\n    return redirect('/')\r\n\r\n\r\ndef about(request):\r\n    return render(request, \"about.html\")\r\n\r\n\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- crm/views.py	(revision 4b958fc20101a6bb99f479f8f1873e45937b94b3)
++++ crm/views.py	(date 1602328377539)
+@@ -116,8 +116,6 @@
+     if request.method == 'POST':
+         name = request.POST.get('name', '')
+         surname = request.POST.get('surname', '')
+-        photo = request.POST.get('photo', '', request.FILES)
+-        #photo = NoteForm(request.POST, request.FILES)
+ 
+         if name == '' or surname == '':
+             messages.add_message(request, messages.ERROR, 'Заполните все поля!')
+@@ -126,7 +124,6 @@
+         student = Student()
+         student.name = name
+         student.surname = surname
+-        student.photo = photo
+         student.save()
+ 
+         return redirect('/student?id={}'.format(student.id))
+@@ -142,7 +139,6 @@
+         student = Student.objects.get(pk=id)
+         name = request.POST.get('name', '')
+         surname = request.POST.get('surname', '')
+-        photo = request.POST.get('photo', request.FILES)
+ 
+         id = request.GET.get('id')
+ 
+@@ -153,7 +149,6 @@
+         student = Student.objects.get(pk=id)
+         student.name = name
+         student.surname = surname
+-        student.photo = photo
+         student.save()
+ 
+         return redirect('/student?id={}'.format(student.id))
+@@ -167,7 +162,6 @@
+     return redirect('/')
+ 
+ 
+-def about(request):
+-    return render(request, "about.html")
++# выше ученики, ниже курсы
+ 
+ 
+Index: crm/templates/base.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css\" integrity=\"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\" crossorigin=\"anonymous\">\r\n<link rel=\"stylesheet\" href=\"https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.js\" integrity=\"sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T\" crossorigin=\"anonymous\">\r\n\r\n\r\n<nav class=\"navbar navbar-expand-lg navbar-dark font-weight-bold\" style=\"background-color: #F41F3B;\" >\r\n<a class=\"navbar-brand font-weight-bold\" href=\"#\">БМБ</a>\r\n<button class=\"navbar-toggler\" type=\"button\" data-toggle=\"collapse\" data-target=\"#navbarNav\" aria-controls=\"navbarNav\" aria-expanded=\"false\" aria-label=\"Toggle navigation\">\r\n<span class=\"navbar-toggler-icon\"></span>\r\n</button>\r\n\r\n<div class=\"collapse navbar-collapse\" id=\"navbarNav\">\r\n<ul class=\"navbar-nav mr-auto justify-content-center\">\r\n<li class=\"nav-item\">\r\n<a class=\"nav-link\" href=\"/all_cards\">Медкарта <span class=\"sr-only\">(current)</span></a>\r\n<li class=\"nav-item\">\r\n<a class=\"nav-link\" href=\"/\">О проекте</a>\r\n</li>\r\n        <!--\r\n<li class=\"nav-item\">\r\n<a class=\"nav-link\" href=\"#\">Стать спонсором</a>\r\n</li>\r\n--!>\r\n</ul>\r\n\r\n\r\n\r\n<form class=\"form-inline my-2 my-lg-0\" id =\"search\">\r\n<input class=\"form-control mr-sm-2\" type=\"search\" placeholder=\"Поиск\" aria-label=\"Search\">\r\n<button class=\"btn btn-outline-dark my-2 my-sm-0 btn-light\" type=\"button\">Искать</button>\r\n</form>\r\n</div>\r\n\r\n    <div class=\"d-flex\">\r\n<button type=\"button\" class=\"btn btn-success mr-1\" data-toggle = \"modal\" data-target = \"/login\">Войти</button>\r\n<button type=\"button\" class=\"btn btn-dark\" href=\"/logout\">Выйти</button>\r\n</div>\r\n\r\n</nav>\r\n\r\n{% block content %}\r\n{% endblock %}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- crm/templates/base.html	(revision 4b958fc20101a6bb99f479f8f1873e45937b94b3)
++++ crm/templates/base.html	(date 1602328377535)
+@@ -1,41 +1,29 @@
+-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
++<!DOCTYPE html>
++<html lang="en">
++<head>
++    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+ <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.js" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+-
++<link rel="script" href="/static/search.js">
+ 
+-<nav class="navbar navbar-expand-lg navbar-dark font-weight-bold" style="background-color: #F41F3B;" >
+-<a class="navbar-brand font-weight-bold" href="#">БМБ</a>
+-<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+-<span class="navbar-toggler-icon"></span>
+-</button>
+-
+-<div class="collapse navbar-collapse" id="navbarNav">
+-<ul class="navbar-nav mr-auto justify-content-center">
+-<li class="nav-item">
+-<a class="nav-link" href="/all_cards">Медкарта <span class="sr-only">(current)</span></a>
+-<li class="nav-item">
+-<a class="nav-link" href="/">О проекте</a>
+-</li>
+-        <!--
+-<li class="nav-item">
+-<a class="nav-link" href="#">Стать спонсором</a>
+-</li>
+---!>
+-</ul>
+-
+-
+-
+-<form class="form-inline my-2 my-lg-0" id ="search">
+-<input class="form-control mr-sm-2" type="search" placeholder="Поиск" aria-label="Search">
+-<button class="btn btn-outline-dark my-2 my-sm-0 btn-light" type="button">Искать</button>
+-</form>
++    {% for message in messages %}
++        <div class="alert alert-danger" role="alert">
++  Заполните все поля!
+ </div>
++    {% endfor %}
+ 
+-    <div class="d-flex">
+-<button type="button" class="btn btn-success mr-1" data-toggle = "modal" data-target = "/login">Войти</button>
+-<button type="button" class="btn btn-dark" href="/logout">Выйти</button>
+-</div>
++    <meta charset="UTF-8">
++    <title>GoToCRM: {% block title %}{% endblock %}</title>
++</head>
++<body>
++<strong>GoToCRM</strong>
++<a href="/">Участники</a>
++<a href="/register">Регистрация</a>
+ 
+-</nav>
++<strong>{{ user.username }}</strong>
++
++<hr>
+ 
+ {% block content %}
+-{% endblock %}
+\ No newline at end of file
++{% endblock %}
++</body>
++</html>
+\ No newline at end of file
+Index: crm/templates/about.html
+===================================================================
+--- crm/templates/about.html	(revision 4b958fc20101a6bb99f479f8f1873e45937b94b3)
++++ crm/templates/about.html	(revision 4b958fc20101a6bb99f479f8f1873e45937b94b3)
+@@ -1,72 +0,0 @@
+-{% extends 'base.html' %}
+-{% block content %}
+-
+-<!— MODAL WINOWs —>
+-
+-<div class="modal" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+-<div class="modal-dialog" role="document">
+-<div class="modal-content">
+-<div class="modal-header">
+-<h5 class="modal-title" id="exampleModalLabel">Форма регистрации</h5>
+-<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+-<span aria-hidden="true">&times;</span>
+-</button>
+-</div>
+-<div class="modal-body">
+-
+-<form>
+-<div class="form-group">
+-<label for="exampleInputEmail1">Электронная почта</label>
+-<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+-<small id="emailHelp" class="form-text text-muted">Не бойся! Мы никому не расскажем твой email!.</small>
+-</div>
+-<div class="form-group">
+-<label for="exampleInputPassword1">Пароль</label>
+-<input type="password" class="form-control" id="exampleInputPassword1">
+-</div>
+-<div class="form-group form-check">
+-<input type="checkbox" class="form-check-input" id="exampleCheck1">
+-<label class="form-check-label" for="exampleCheck1">Запомнить</label>
+-</div>
+-<button type="submit" class="btn btn-success">Принять</button>
+-</form>
+-
+-</div>
+-<div class="modal-footer">
+-<button type="button" class="btn btn-success" data-dismiss="modal">Сохранить изменения</button>
+-<button type="button" class="btn btn-dark">Закрыть</button>
+-</div>
+-</div>
+-</div>
+-</div>
+-
+-<!— Modal end —>
+-
+-<div class="container my-5">
+-
+-<div class="row">
+-
+-<div class="col-md-4 ">
+-<img class="w-100" src="/static/Bar.png" alt="">
+-</div>
+-<div class="col-md-8">
+-<h2 style="color: #696969;">NFC БРАСЛЕТЫ</h2>
+-<p style="font-size: 20px; line-height: 1.2; color: #808080">Разаработанные в сотрудничестве с учеными из ИЦ "Сколково", данные браслеты хранят данные о человеке, чтобы в самый ответственный момент не терять ни секунды на оказание первой медицинской помощи.</p>
+-</div>
+-
+-
+-</div>
+-</div>
+-
+-<div class="container my-5">
+-<div class="row">
+-<div class="col-md-4">
+-<img class="w-100" src="/static/Dur.png" alt="">
+-</div>
+-<div class="col-md-8">
+-<h2 style="color: #696969;"> Привет, обеспокоенный! </h2>
+-<p style="font-size: 20px; line-height: 1.2; color: #808080">Что, наконец-то решил обратить внимание на свое здоровье? Отлично, тогда я помогу. Я дам тебе браслет, с помощью телефона неравнодушные прохожие смогут считать с этого браслета информацию о твоем здоровье, аллергиях и хронических заболеваниях. </p>
+-</div>
+-</div>
+-</div>
+-{% endblock %}
+\ No newline at end of file
+Index: crm/migrations/0007_auto_20201010_1352.py
+===================================================================
+--- crm/migrations/0007_auto_20201010_1352.py	(revision 4b958fc20101a6bb99f479f8f1873e45937b94b3)
++++ crm/migrations/0007_auto_20201010_1352.py	(revision 4b958fc20101a6bb99f479f8f1873e45937b94b3)
+@@ -1,47 +0,0 @@
+-# Generated by Django 2.2.3 on 2020-10-10 10:52
+-
+-from django.db import migrations, models
+-
+-
+-class Migration(migrations.Migration):
+-
+-    dependencies = [
+-        ('crm', '0006_student_photo'),
+-    ]
+-
+-    operations = [
+-        migrations.RemoveField(
+-            model_name='student',
+-            name='course',
+-        ),
+-        migrations.RemoveField(
+-            model_name='student',
+-            name='room',
+-        ),
+-        migrations.AddField(
+-            model_name='student',
+-            name='dadname',
+-            field=models.CharField(max_length=30, null=True),
+-        ),
+-        migrations.AddField(
+-            model_name='student',
+-            name='phone_number',
+-            field=models.CharField(max_length=12, null=True),
+-        ),
+-        migrations.AddField(
+-            model_name='student',
+-            name='sex',
+-            field=models.CharField(choices=[('M', 'Man'), ('W', 'Woman')], max_length=1, null=True),
+-        ),
+-        migrations.AddField(
+-            model_name='student',
+-            name='weight',
+-            field=models.FloatField(null=True),
+-        ),
+-        migrations.DeleteModel(
+-            name='Comment',
+-        ),
+-        migrations.DeleteModel(
+-            name='Course',
+-        ),
+-    ]
+Index: crm/templates/base_old.html
+===================================================================
+--- crm/templates/base_old.html	(revision 4b958fc20101a6bb99f479f8f1873e45937b94b3)
++++ crm/templates/base_old.html	(revision 4b958fc20101a6bb99f479f8f1873e45937b94b3)
+@@ -1,29 +0,0 @@
+-<!DOCTYPE html>
+-<html lang="en">
+-<head>
+-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.js" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+-<link rel="script" href="/static/search.js">
+-
+-    {% for message in messages %}
+-        <div class="alert alert-danger" role="alert">
+-  Заполните все поля!
+-</div>
+-    {% endfor %}
+-
+-    <meta charset="UTF-8">
+-    <title>GoToCRM: {% block title %}{% endblock %}</title>
+-</head>
+-<body>
+-<strong>GoToCRM</strong>
+-<a href="/">Участники</a>
+-<a href="/register">Регистрация</a>
+-
+-<strong>{{ user.username }}</strong>
+-
+-<hr>
+-
+-{% block content %}
+-{% endblock %}
+-</body>
+-</html>
+\ No newline at end of file
+Index: .idea/workspace.xml
+===================================================================
+--- .idea/workspace.xml	(revision 4b958fc20101a6bb99f479f8f1873e45937b94b3)
++++ .idea/workspace.xml	(revision 4b958fc20101a6bb99f479f8f1873e45937b94b3)
+@@ -1,272 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="ChangeListManager">
+-    <list default="true" id="813ad25f-3766-4b64-916c-e5e1f40b4d3c" name="Default Changelist" comment="">
+-      <change beforePath="$PROJECT_DIR$/GoToCRM/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/GoToCRM/urls.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/crm/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/models.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/crm/templates/add.html" beforeDir="false" afterPath="$PROJECT_DIR$/crm/templates/add.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/crm/templates/base.html" beforeDir="false" afterPath="$PROJECT_DIR$/crm/templates/base_old.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/crm/templates/edit.html" beforeDir="false" afterPath="$PROJECT_DIR$/crm/templates/edit.html" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/crm/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/crm/views.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/db.sqlite3" afterDir="false" />
+-    </list>
+-    <option name="SHOW_DIALOG" value="false" />
+-    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+-    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+-    <option name="LAST_RESOLUTION" value="IGNORE" />
+-  </component>
+-  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+-    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+-  </component>
+-  <component name="FileTemplateManagerImpl">
+-    <option name="RECENT_TEMPLATES">
+-      <list>
+-        <option value="Python Script" />
+-        <option value="HTML File" />
+-      </list>
+-    </option>
+-  </component>
+-  <component name="Git.Settings">
+-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+-  </component>
+-  <component name="JupyterTrust" id="07996095-2210-4c20-a17f-49a01be6cc0e" />
+-  <component name="ProjectId" id="1fSCPvBplZRrvg6x7Vxx0HphTr3" />
+-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+-    <ConfirmationsSetting value="1" id="Add" />
+-  </component>
+-  <component name="ProjectViewState">
+-    <option name="hideEmptyMiddlePackages" value="true" />
+-    <option name="showLibraryContents" value="true" />
+-  </component>
+-  <component name="PropertiesComponent">
+-    <property name="DefaultHtmlFileTemplate" value="HTML File" />
+-    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+-    <property name="WebServerToolWindowFactoryState" value="false" />
+-    <property name="database.console.LAST_STATE" value="false" />
+-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+-    <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
+-    <property name="nodejs_npm_path_reset_for_default_project" value="true" />
+-    <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
+-  </component>
+-  <component name="RecentsManager">
+-    <key name="MoveFile.RECENT_KEYS">
+-      <recent name="C:\goto_django\BMB\crm\static" />
+-    </key>
+-    <key name="CopyFile.RECENT_KEYS">
+-      <recent name="$PROJECT_DIR$/crm/templates" />
+-    </key>
+-  </component>
+-  <component name="RunManager" selected="Python.manage">
+-    <configuration name="bot" type="PythonConfigurationType" factoryName="Python" temporary="true">
+-      <module name="GoToCRM" />
+-      <option name="INTERPRETER_OPTIONS" value="" />
+-      <option name="PARENT_ENVS" value="true" />
+-      <envs>
+-        <env name="PYTHONUNBUFFERED" value="1" />
+-      </envs>
+-      <option name="SDK_HOME" value="" />
+-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/crm" />
+-      <option name="IS_MODULE_SDK" value="true" />
+-      <option name="ADD_CONTENT_ROOTS" value="true" />
+-      <option name="ADD_SOURCE_ROOTS" value="true" />
+-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/crm/bot.py" />
+-      <option name="PARAMETERS" value="" />
+-      <option name="SHOW_COMMAND_LINE" value="false" />
+-      <option name="EMULATE_TERMINAL" value="false" />
+-      <option name="MODULE_MODE" value="false" />
+-      <option name="REDIRECT_INPUT" value="false" />
+-      <option name="INPUT_FILE" value="" />
+-      <method v="2" />
+-    </configuration>
+-    <configuration name="manage" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+-      <module name="GoToCRM" />
+-      <option name="INTERPRETER_OPTIONS" value="" />
+-      <option name="PARENT_ENVS" value="true" />
+-      <envs>
+-        <env name="PYTHONUNBUFFERED" value="1" />
+-      </envs>
+-      <option name="SDK_HOME" value="" />
+-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+-      <option name="IS_MODULE_SDK" value="true" />
+-      <option name="ADD_CONTENT_ROOTS" value="true" />
+-      <option name="ADD_SOURCE_ROOTS" value="true" />
+-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/manage.py" />
+-      <option name="PARAMETERS" value="" />
+-      <option name="SHOW_COMMAND_LINE" value="false" />
+-      <option name="EMULATE_TERMINAL" value="false" />
+-      <option name="MODULE_MODE" value="false" />
+-      <option name="REDIRECT_INPUT" value="false" />
+-      <option name="INPUT_FILE" value="" />
+-      <method v="2" />
+-    </configuration>
+-    <configuration name="views" type="PythonConfigurationType" factoryName="Python" temporary="true">
+-      <module name="GoToCRM" />
+-      <option name="INTERPRETER_OPTIONS" value="" />
+-      <option name="PARENT_ENVS" value="true" />
+-      <envs>
+-        <env name="PYTHONUNBUFFERED" value="1" />
+-      </envs>
+-      <option name="SDK_HOME" value="" />
+-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/crm" />
+-      <option name="IS_MODULE_SDK" value="true" />
+-      <option name="ADD_CONTENT_ROOTS" value="true" />
+-      <option name="ADD_SOURCE_ROOTS" value="true" />
+-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/crm/views.py" />
+-      <option name="PARAMETERS" value="" />
+-      <option name="SHOW_COMMAND_LINE" value="false" />
+-      <option name="EMULATE_TERMINAL" value="false" />
+-      <option name="MODULE_MODE" value="false" />
+-      <option name="REDIRECT_INPUT" value="false" />
+-      <option name="INPUT_FILE" value="" />
+-      <method v="2" />
+-    </configuration>
+-    <configuration name="GoToCRM" type="Python.DjangoServer" factoryName="Django server">
+-      <module name="GoToCRM" />
+-      <option name="INTERPRETER_OPTIONS" value="" />
+-      <option name="PARENT_ENVS" value="true" />
+-      <envs>
+-        <env name="PYTHONUNBUFFERED" value="1" />
+-      </envs>
+-      <option name="SDK_HOME" value="" />
+-      <option name="WORKING_DIRECTORY" value="" />
+-      <option name="IS_MODULE_SDK" value="false" />
+-      <option name="ADD_CONTENT_ROOTS" value="true" />
+-      <option name="ADD_SOURCE_ROOTS" value="true" />
+-      <option name="launchJavascriptDebuger" value="false" />
+-      <option name="port" value="8000" />
+-      <option name="host" value="" />
+-      <option name="additionalOptions" value="" />
+-      <option name="browserUrl" value="" />
+-      <option name="runTestServer" value="false" />
+-      <option name="runNoReload" value="false" />
+-      <option name="useCustomRunCommand" value="false" />
+-      <option name="customRunCommand" value="" />
+-      <method v="2" />
+-    </configuration>
+-    <recent_temporary>
+-      <list>
+-        <item itemvalue="Python.manage" />
+-        <item itemvalue="Python.bot" />
+-        <item itemvalue="Python.views" />
+-      </list>
+-    </recent_temporary>
+-  </component>
+-  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+-  <component name="SvnConfiguration">
+-    <configuration />
+-  </component>
+-  <component name="TaskManager">
+-    <task active="true" id="Default" summary="Default task">
+-      <changelist id="813ad25f-3766-4b64-916c-e5e1f40b4d3c" name="Default Changelist" comment="" />
+-      <created>1565855181873</created>
+-      <option name="number" value="Default" />
+-      <option name="presentableId" value="Default" />
+-      <updated>1565855181873</updated>
+-      <workItem from="1602273015433" duration="537000" />
+-      <workItem from="1602313926548" duration="371000" />
+-      <workItem from="1602314411673" duration="12936000" />
+-    </task>
+-    <task id="LOCAL-00001" summary="+bootstrap">
+-      <created>1565941698422</created>
+-      <option name="number" value="00001" />
+-      <option name="presentableId" value="LOCAL-00001" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1565941698422</updated>
+-    </task>
+-    <task id="LOCAL-00002" summary="+bot">
+-      <created>1566038123730</created>
+-      <option name="number" value="00002" />
+-      <option name="presentableId" value="LOCAL-00002" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1566038123730</updated>
+-    </task>
+-    <task id="LOCAL-00003" summary="+comments">
+-      <created>1566044892984</created>
+-      <option name="number" value="00003" />
+-      <option name="presentableId" value="LOCAL-00003" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1566044892984</updated>
+-    </task>
+-    <task id="LOCAL-00004" summary="+search">
+-      <created>1566114202545</created>
+-      <option name="number" value="00004" />
+-      <option name="presentableId" value="LOCAL-00004" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1566114202545</updated>
+-    </task>
+-    <task id="LOCAL-00005" summary="+search">
+-      <created>1566115026690</created>
+-      <option name="number" value="00005" />
+-      <option name="presentableId" value="LOCAL-00005" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1566115026690</updated>
+-    </task>
+-    <task id="LOCAL-00006" summary="+search">
+-      <created>1602319804713</created>
+-      <option name="number" value="00006" />
+-      <option name="presentableId" value="LOCAL-00006" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1602319804713</updated>
+-    </task>
+-    <option name="localTasksCounter" value="7" />
+-    <servers />
+-  </component>
+-  <component name="TypeScriptGeneratedFilesManager">
+-    <option name="version" value="3" />
+-  </component>
+-  <component name="VcsManagerConfiguration">
+-    <MESSAGE value="+bootstrap" />
+-    <MESSAGE value="+bot" />
+-    <MESSAGE value="+comments" />
+-    <MESSAGE value="+search" />
+-    <option name="LAST_COMMIT_MESSAGE" value="+search" />
+-  </component>
+-  <component name="WindowStateProjectService">
+-    <state x="393" y="0" key="CommitChangelistDialog2" timestamp="1602319800174">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state x="393" y="0" key="CommitChangelistDialog2/0.0.1536.824@0.0.1536.824" timestamp="1602319800174" />
+-    <state x="549" y="167" key="FileChooserDialogImpl" timestamp="1602322958819">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state x="549" y="167" key="FileChooserDialogImpl/0.0.1536.824@0.0.1536.824" timestamp="1602322958818" />
+-    <state x="647" y="310" width="241" height="259" key="Github.ShareDialog" timestamp="1602315733124">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state x="647" y="310" width="241" height="259" key="Github.ShareDialog/0.0.1536.824@0.0.1536.824" timestamp="1602315733124" />
+-    <state width="1493" height="143" key="GridCell.Tab.0.bottom" timestamp="1602273553003">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state width="1493" height="143" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1602273553003" />
+-    <state width="1493" height="143" key="GridCell.Tab.0.center" timestamp="1602273553003">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state width="1493" height="143" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1602273553003" />
+-    <state width="1493" height="143" key="GridCell.Tab.0.left" timestamp="1602273553002">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state width="1493" height="143" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1602273553002" />
+-    <state width="1493" height="143" key="GridCell.Tab.0.right" timestamp="1602273553003">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state width="1493" height="143" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1602273553003" />
+-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1602319841567">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1602319841567" />
+-    <state x="349" y="67" key="com.intellij.database.dbimport.ImportDialog" timestamp="1602327173008">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state x="349" y="67" key="com.intellij.database.dbimport.ImportDialog/0.0.1536.824@0.0.1536.824" timestamp="1602327173008" />
+-    <state x="598" y="298" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1602327021064">
+-      <screen x="0" y="0" width="1536" height="824" />
+-    </state>
+-    <state x="598" y="298" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1602327021064" />
+-  </component>
+-  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+-    <SUITE FILE_PATH="coverage/GoToCRM_2$manage.coverage" NAME="manage Coverage Results" MODIFIED="1602273098505" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+-  </component>
+-</project>
+\ No newline at end of file
+Index: crm/templates/edit.html
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>{% extends 'base.html' %}\r\n\r\n{%  block title %}Добавить участника{% endblock %}\r\n\r\n{% block content %}\r\n<a href=\"/student?id={{ student.id }}\">Назад</a>\r\n<h1>Изменить: {{ student.name }} {{ student.surname }}</h1>\r\n\r\n<form action=\"/edit?id={{ student.id }}\" method=\"post\" enctype=\"multipart/form-data\">\r\n    {% csrf_token %}\r\n    <strong>Имя: </strong> <input type=\"text\" name=\"name\" value=\"{{ student.name }}\"/><br>\r\n    <strong>Фамилия: </strong> <input type=\"text\" name=\"surname\" value=\"{{ student.surname }}\"/><br>\r\n    <strong>Загрузить фото: </strong> <input type=\"file\" name=\"photo\" value=\"{{ student.photo }}\"/><br>\r\n\r\n    <br>\r\n    <input type=\"submit\" value=\"Сохранить\">\r\n</form>\r\n{% endblock %}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- crm/templates/edit.html	(revision 4b958fc20101a6bb99f479f8f1873e45937b94b3)
++++ crm/templates/edit.html	(date 1602328377537)
+@@ -6,11 +6,10 @@
+ <a href="/student?id={{ student.id }}">Назад</a>
+ <h1>Изменить: {{ student.name }} {{ student.surname }}</h1>
+ 
+-<form action="/edit?id={{ student.id }}" method="post" enctype="multipart/form-data">
++<form action="/edit?id={{ student.id }}" method="post">
+     {% csrf_token %}
+     <strong>Имя: </strong> <input type="text" name="name" value="{{ student.name }}"/><br>
+     <strong>Фамилия: </strong> <input type="text" name="surname" value="{{ student.surname }}"/><br>
+-    <strong>Загрузить фото: </strong> <input type="file" name="photo" value="{{ student.photo }}"/><br>
+ 
+     <br>
+     <input type="submit" value="Сохранить">
+Index: crm/models.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from django.contrib.auth.models import User\r\nfrom django.db import models\r\n\r\n# Create your models here.\r\n\r\n\r\nclass Student(models.Model):\r\n    sex_types = (\r\n        ('M', 'Man'),\r\n        ('W', 'Woman')\r\n    )\r\n    name = models.CharField(max_length=30, null=True)\r\n    surname = models.CharField(max_length=30, null=True)\r\n    dadname = models.CharField(max_length=30, null=True)\r\n    email = models.EmailField(null=True)\r\n    description = models.TextField(default=\"\")\r\n    photo = models.FilePathField(null=True)\r\n    sex = models.CharField(max_length=1, null=True, choices=sex_types)\r\n    weight = models.FloatField(null=True)\r\n    phone_number = models.CharField(max_length=12, null=True)\r\n\r\n    def __str__(self):\r\n        return self.name + \" \" + self.surname
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- crm/models.py	(revision 4b958fc20101a6bb99f479f8f1873e45937b94b3)
++++ crm/models.py	(date 1602328377530)
+@@ -20,4 +20,6 @@
+     phone_number = models.CharField(max_length=12, null=True)
+ 
+     def __str__(self):
+-        return self.name + " " + self.surname
+\ No newline at end of file
++        return self.name + " " + self.surname
++
++

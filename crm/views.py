@@ -13,7 +13,6 @@ class RegisterValidation(forms.Form):
     login = forms.CharField(max_length=30)
     email = forms.EmailField()
     password = forms.CharField(min_length=6)
-    invite = forms.CharField(max_length=10)
 
 
 class LoginValidation(forms.Form):
@@ -39,7 +38,7 @@ def index(request):
 
 def logout_page(request):
     logout(request)
-    return redirect('/login')
+    return redirect('/')
 
 
 def login_page(request):
@@ -64,7 +63,6 @@ def login_page(request):
 
 
 def register(request):
-    invites = {'admin': 'cool_admin', 'user': 'stupid_user'}
 
     if request.method == 'GET':
         return render(request, 'register.html')
@@ -81,18 +79,12 @@ def register(request):
 
         user.email = request.POST.get('email')
         if User.objects.all().filter(email=user.email):
-            return HttpResponse('Юзернейм уже существует')
+            return HttpResponse('Пользователь с такой почтой уже существует')
 
-        invite = request.POST.get('invite')
-        for i in invites:
-            print(invites[i])
-            if invite == invites[i]:
-                user.set_password(request.POST.get('password'))
-                user.save()
-                login(request, user)
-                return redirect('/')
-            else:
-                return HttpResponse('Трабл с инвайтом')
+        user.set_password(request.POST.get('password'))
+        user.save()
+        login(request, user)
+        return redirect('/')
 
 
 def details(request):
@@ -116,8 +108,8 @@ def add(request):
     if request.method == 'POST':
         name = request.POST.get('name', '')
         surname = request.POST.get('surname', '')
-        photo = request.POST.get('photo', '', request.FILES)
-        #photo = NoteForm(request.POST, request.FILES)
+        photo = request.get('photo', '')
+        photo.raise_for_status()
 
         if name == '' or surname == '':
             messages.add_message(request, messages.ERROR, 'Заполните все поля!')

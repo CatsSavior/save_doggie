@@ -1,19 +1,12 @@
 {% extends 'base.html' %}
 
-{% block title %}Участники{% endblock %}
+{% block title %}Питомцы{% endblock %}
 
 {% block content %}
 <a href="/add">Добавить</a>
 <br>
 
-<strong>Поиск по участникам:</strong>
-
-<form action="/" method="post">
-    {% csrf_token %}
-<input type="text" name="search"/>
-<input type="submit" value="Поиск"><br>
-
-<h1>Участники</h1>
+<h1>Твои питомцы</h1>
 
 <ul>
 
